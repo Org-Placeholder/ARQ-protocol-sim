@@ -10,6 +10,9 @@ from_physical_layer = (data) => {
 }
 
 //from_network_layer kya krega exactly apne simulation mei woh doubtful
+from_network_layer = (array,index) => {
+    return array[index] //return the required packet
+}
 
 to_network_layer = (data) => {
     console.log('Network layer recieved : ', data)
