@@ -13,7 +13,9 @@ var packet_index = 0;
 var timer;
 var socket;
 const send = (ip, port) => {
-	socket = io("http://" + ip + ":" + toString(port));
+	socket = io("http://" + ip + ":" + toString(port), {
+		transports: ["websocket"],
+	});
 	socket.on("connect_error", (err) => {
 		console.log("Connection unsucessful : " + err);
 		process.exit();
@@ -54,6 +56,7 @@ const handle_event = (frame) => {
 var args = process.argv;
 if (args.length < 5) {
 	console.log("node sender.js [ip,port,packet]");
+	process.exit();
 }
 const ip = args[2];
 const port = args[3];
