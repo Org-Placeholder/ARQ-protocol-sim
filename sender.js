@@ -13,17 +13,19 @@ var packet_index = 0;
 var timer;
 var socket;
 const send = (ip, port) => {
-	socket = io("http://" + ip + ":" + toString(port), {
-		transports: ["websocket"],
-	});
+	//socket = io("http://" + ip + ":" + toString(port));
+	socket = io.connect("http://localhost:3000", { reconnect: true });
 	socket.on("connect_error", (err) => {
 		console.log("Connection unsucessful : " + err);
 		process.exit();
 	});
-	send_current_frame();
+
 	socket.on("message", (data) => {
 		var frame = from_physical_layer(data);
 		handle_event(frame);
+	});
+	socket.on("connect", (socket) => {
+		send_current_frame();
 	});
 };
 

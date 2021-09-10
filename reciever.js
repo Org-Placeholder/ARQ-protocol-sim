@@ -6,12 +6,17 @@ import {
 import { frame_types } from "./const.js";
 import require from "requirejs";
 
-const http = require("http").createServer();
-const io = require("socket.io")(http);
+const express = require("express");
+const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 var exp_seq_no = 0;
 
 const recieve = (io, port) => {
-	http.listen(port, () => console.log(`server listening on port: ${port}`));
+	server.listen(port, () => console.log(`server listening on port: ${port}`));
 
 	io.on("connection", (socket) => {
 		console.log("sender connected");
