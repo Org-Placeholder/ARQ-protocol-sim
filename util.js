@@ -6,7 +6,7 @@ to_physical_layer = (io, frame) => {
 
 //use from_physical_layer to parse the data and return the json
 from_physical_layer = (data) => {
-    var frame; //initialize it by parsing data
+    var frame = data; //initialize it by parsing data
     return frame
 }
 
@@ -32,7 +32,7 @@ construct_packet_array = (message) => {
     return packet_array
 }
 
-construct_frame = (packet,seq_num,kind) => {
+construct_frame = (packet,seq_no,kind) => {
     frame = {info:packet, seq_no:seq_no, kind:kind}
     return frame
 }

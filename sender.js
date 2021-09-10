@@ -8,7 +8,8 @@ send = (ip, port) => {
     var socket = io("http://" + ip + ":" + str(port))
 
     send_current_frame()
-    socket.on('message', frame => {
+    socket.on('message', data => {
+        var frame = from_physical_layer(data)
         handle_event(frame)
     })
 }
@@ -16,7 +17,7 @@ send = (ip, port) => {
 send_current_frame = () => {
     var packet = from_network_layer(frame_array,frame_index)
     var frame = construct_frame(packet, packet_index%2, frame_types.ACK)
-    to_physical_layer(frame)
+    to_physical_layer(io,frame)
     timer = setTimeout(TIMEOUT_LENGTH,  () => {
         console.log('Timer timed out, resending')
         send_current_frame()
@@ -25,7 +26,7 @@ send_current_frame = () => {
 }
 
 handle_event = (frame) => {
-    if(frame.type != frame_types.ACK){
+    if(frame.kind != frame_types.ACK){
         console.log('Damaged frame received, doing nothing')
     }
     else{
