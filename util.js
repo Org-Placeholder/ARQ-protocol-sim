@@ -5,32 +5,37 @@ import {
 	DELAY_MIN,
 	DELAY_MAX,
 } from "./const.js";
+var message = "";
 export const to_physical_layer = (socket, frame) => {
-	//preprocess frame if needed, maybe randomize the error and also delay
-	console.log("Physical layer sending : \n");
-	console.log(frame);
 	if (Math.random() < CORRUPTION_PROBABLITY) {
 		frame.kind = frame_types.DAMAGED;
 	}
+	console.log("[PHYSICAL LAYER] Sending frame:");
+	console.log(frame);
 	var delay = DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN);
 	setTimeout(() => {
 		socket.emit("message", frame);
 	}, delay);
 };
 
-//use from_physical_layer to parse the data and return the json
 export const from_physical_layer = (data) => {
 	var frame = data; //initialize it by parsing data
+	console.log("[PHYSICAL LAYER] Received frame:");
+	console.log(frame);
 	return frame;
 };
 
-//from_network_layer kya krega exactly apne simulation mei woh doubtful
 export const from_network_layer = (array, index) => {
 	return array[index]; //return the required packet
 };
 
 export const to_network_layer = (data) => {
-	console.log("Network layer recieved : ", data);
+	console.log("[NETWORK LAYER] Received Data: ", data);
+	message = message.concat(data);
+};
+
+export const print_message = () => {
+	console.log("[NETWORK LAYER] Data Received : " + message);
 };
 
 export const construct_packet_array = (message) => {
@@ -43,7 +48,9 @@ export const construct_packet_array = (message) => {
 			str = "";
 		}
 	}
-	console.log(packet_array);
+	console.log(
+		"[NETWORK LAYER] The packet array to be sent is : " + packet_array
+	);
 	return packet_array;
 };
 

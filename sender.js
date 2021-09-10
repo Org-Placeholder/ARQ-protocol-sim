@@ -31,28 +31,31 @@ const send = (ip, port) => {
 
 const send_current_frame = () => {
 	var packet = from_network_layer(packet_array, packet_index);
-	var frame = construct_frame(packet, packet_index % 2, frame_types.INFO);
+	var frame = construct_frame(packet, packet_index, frame_types.INFO);
 	to_physical_layer(socket, frame);
 	timer = setTimeout(() => {
-		console.log("Timer timed out, resending");
+		console.log("[DATA LINK LAYER] Timer timed out, resending");
 		send_current_frame();
 	}, TIMEOUT_LENGTH);
 };
 
 const handle_event = (frame) => {
 	if (frame.kind != frame_types.ACK) {
-		console.log("Damaged frame received, doing nothing");
+		console.log("[DATA LINK LAYER] Damaged frame received, doing nothing");
 	} else {
-		if (frame.seq_no == packet_index % 2) {
+		if (frame.seq_no == packet_index) {
 			packet_index++;
 			clearTimeout(timer);
 			if (packet_index < packet_array.length) {
 				send_current_frame();
 			} else {
+				socket.disconnect();
 				process.exit();
 			}
 		} else {
-			console.log("Out of order acknowledgement received, ignored");
+			console.log(
+				"[DATA LINK LAYER] Out of order acknowledgement received, ignored"
+			);
 		}
 	}
 };
