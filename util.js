@@ -1,7 +1,21 @@
-import { frame_types, MAX_PACKET_LENGTH } from "./const.js";
+import {
+	frame_types,
+	MAX_PACKET_LENGTH,
+	CORRUPTION_PROBABLITY,
+	DELAY_MIN,
+	DELAY_MAX,
+} from "./const.js";
 export const to_physical_layer = (socket, frame) => {
 	//preprocess frame if needed, maybe randomize the error and also delay
-	socket.emit("message", frame);
+	console.log("Physical layer sending : \n");
+	console.log(frame);
+	if (Math.random() < CORRUPTION_PROBABLITY) {
+		frame.kind = frame_types.DAMAGED;
+	}
+	var delay = DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN);
+	setTimeout(() => {
+		socket.emit("message", frame);
+	}, delay);
 };
 
 //use from_physical_layer to parse the data and return the json
@@ -23,12 +37,13 @@ export const construct_packet_array = (message) => {
 	const packet_array = [];
 	var str = "";
 	for (let i = 0; i < message.length; i++) {
-		str.concat(message[i]);
+		str = str.concat(message[i]);
 		if (str.length == MAX_PACKET_LENGTH) {
-			packet_array.append(str);
+			packet_array.push(str);
 			str = "";
 		}
 	}
+	console.log(packet_array);
 	return packet_array;
 };
 

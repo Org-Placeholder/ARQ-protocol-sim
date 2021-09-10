@@ -31,7 +31,7 @@ const send = (ip, port) => {
 
 const send_current_frame = () => {
 	var packet = from_network_layer(packet_array, packet_index);
-	var frame = construct_frame(packet, packet_index % 2, frame_types.ACK);
+	var frame = construct_frame(packet, packet_index % 2, frame_types.INFO);
 	to_physical_layer(socket, frame);
 	timer = setTimeout(() => {
 		console.log("Timer timed out, resending");
@@ -48,6 +48,8 @@ const handle_event = (frame) => {
 			clearTimeout(timer);
 			if (packet_index < packet_array.length) {
 				send_current_frame();
+			} else {
+				process.exit();
 			}
 		} else {
 			console.log("Out of order acknowledgement received, ignored");
@@ -63,6 +65,7 @@ if (args.length < 5) {
 const ip = args[2];
 const port = args[3];
 const message = args[4];
-packet_array = construct_packet_array(message);
 
+packet_array = construct_packet_array(message);
+console.log(packet_array);
 send(ip, port);

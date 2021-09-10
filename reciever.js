@@ -2,6 +2,7 @@ import {
 	from_physical_layer,
 	to_network_layer,
 	to_physical_layer,
+	construct_frame,
 } from "./util.js";
 import { frame_types } from "./const.js";
 import require from "requirejs";
@@ -12,15 +13,17 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
+var socket;
 var exp_seq_no = 0;
 
 const recieve = (io, port) => {
 	server.listen(port, () => console.log(`server listening on port: ${port}`));
 
-	io.on("connection", (socket) => {
+	io.on("connection", (s) => {
+		socket = s;
 		console.log("sender connected");
 		socket.on("message", (data) => {
+			console.log(data);
 			handle_event(data);
 		});
 	});
@@ -42,9 +45,10 @@ const handle_event = (data) => {
 			);
 		} else {
 			to_network_layer(frame.info);
+			exp_seq_no = (exp_seq_no + 1) % 2;
 		}
-		ack_frame = construct_frame("", frame.seq_no, frame_types.ACK);
-		to_physical_layer(io.socket, ack_frame);
+		var ack_frame = construct_frame("", frame.seq_no, frame_types.ACK);
+		to_physical_layer(socket, ack_frame);
 	}
 	// handle data
 	// agar packet type barabar hoga toh to_network_layer recieved info and then to_physical_layer ack
