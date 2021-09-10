@@ -1,3 +1,6 @@
+import require from "requirejs";
+const colors = require("colors");
+
 export const frame_types = {
 	ACK: "ack",
 	INFO: "info",

@@ -7,6 +7,7 @@ import {
 } from "./util.js";
 import { frame_types } from "./const.js";
 import require from "requirejs";
+
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -18,12 +19,12 @@ var exp_seq_no = 0;
 
 const recieve = (io, port) => {
 	server.listen(port, () =>
-		console.log(`[GENERAL] server listening on port: ${port}`)
+		console.log("[GENERAL]".magenta + " server listening on port:" + port)
 	);
 
 	io.on("connection", (s) => {
 		socket = s;
-		console.log("[GENERAL] sender connected");
+		console.log("[GENERAL]".magenta + "sender connected");
 		socket.on("message", (data) => {
 			handle_event(data);
 		});
@@ -38,11 +39,14 @@ const handle_event = (data) => {
 	var frame = from_physical_layer(data);
 
 	if (frame.kind != frame_types.INFO) {
-		console.log("[DATA LINK LAYER] Damaged frame received, doing nothing");
+		console.log(
+			"[DATA LINK LAYER]".blue + " Damaged frame received, doing nothing"
+		);
 	} else {
 		if (frame.seq_no != exp_seq_no) {
 			console.log(
-				"[DATA LINK LAYER] Out of order frame received, sending ACK and discarding"
+				"[DATA LINK LAYER]".blue +
+					" Out of order frame received, sending ACK and discarding"
 			);
 		} else {
 			to_network_layer(frame.info);

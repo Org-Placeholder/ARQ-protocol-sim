@@ -10,7 +10,7 @@ export const to_physical_layer = (socket, frame) => {
 	if (Math.random() < CORRUPTION_PROBABLITY) {
 		frame.kind = frame_types.DAMAGED;
 	}
-	console.log("[PHYSICAL LAYER] Sending frame:");
+	console.log("[PHYSICAL LAYER]".green + " Sending frame:");
 	console.log(frame);
 	var delay = DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN);
 	setTimeout(() => {
@@ -20,7 +20,7 @@ export const to_physical_layer = (socket, frame) => {
 
 export const from_physical_layer = (data) => {
 	var frame = data; //initialize it by parsing data
-	console.log("[PHYSICAL LAYER] Received frame:");
+	console.log("[PHYSICAL LAYER]".green + " Received frame:");
 	console.log(frame);
 	return frame;
 };
@@ -30,12 +30,12 @@ export const from_network_layer = (array, index) => {
 };
 
 export const to_network_layer = (data) => {
-	console.log("[NETWORK LAYER] Received Data: ", data);
+	console.log("[NETWORK LAYER]".yellow + " Received Data: ", data);
 	message = message.concat(data);
 };
 
 export const print_message = () => {
-	console.log("[NETWORK LAYER] Data Received : " + message);
+	console.log("[NETWORK LAYER]".yellow + " Data Received : " + message);
 };
 
 export const construct_packet_array = (message) => {
@@ -49,7 +49,9 @@ export const construct_packet_array = (message) => {
 		}
 	}
 	console.log(
-		"[NETWORK LAYER] The packet array to be sent is : " + packet_array
+		"[NETWORK LAYER]".yellow +
+			" The packet array to be sent is : " +
+			packet_array
 	);
 	return packet_array;
 };

@@ -15,7 +15,7 @@ var socket;
 const send = (ip, port) => {
 	socket = io.connect("http://" + ip + ":" + port, { reconnect: true });
 	socket.on("connect_error", (err) => {
-		console.log("Connection unsucessful : " + err);
+		console.log("[GENERAL]".magenta + "Connection unsucessful : " + err);
 		process.exit();
 	});
 
@@ -33,14 +33,16 @@ const send_current_frame = () => {
 	var frame = construct_frame(packet, packet_index, frame_types.INFO);
 	to_physical_layer(socket, frame);
 	timer = setTimeout(() => {
-		console.log("[DATA LINK LAYER] Timer timed out, resending");
+		console.log("[DATA LINK LAYER]".blue + " Timer timed out, resending");
 		send_current_frame();
 	}, TIMEOUT_LENGTH);
 };
 
 const handle_event = (frame) => {
 	if (frame.kind != frame_types.ACK) {
-		console.log("[DATA LINK LAYER] Damaged frame received, doing nothing");
+		console.log(
+			"[DATA LINK LAYER]".blue + " Damaged frame received, doing nothing"
+		);
 	} else {
 		if (frame.seq_no == packet_index) {
 			packet_index++;
@@ -53,7 +55,8 @@ const handle_event = (frame) => {
 			}
 		} else {
 			console.log(
-				"[DATA LINK LAYER] Out of order acknowledgement received, ignored"
+				"[DATA LINK LAYER]".blue +
+					" Out of order acknowledgement received, ignored"
 			);
 		}
 	}
