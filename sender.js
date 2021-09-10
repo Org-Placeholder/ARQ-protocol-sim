@@ -13,8 +13,7 @@ var packet_index = 0;
 var timer;
 var socket;
 const send = (ip, port) => {
-	//socket = io("http://" + ip + ":" + toString(port));
-	socket = io.connect("http://localhost:3000", { reconnect: true });
+	socket = io.connect("http://" + ip + ":" + port, { reconnect: true });
 	socket.on("connect_error", (err) => {
 		console.log("Connection unsucessful : " + err);
 		process.exit();
