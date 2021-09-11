@@ -17,3 +17,7 @@ This simulates a stop and wait ARQ protocol with modifiable simulation constrain
 - All logs are prepended by **[LAYER_NAME]** which shows which layer is logging the information.
 - Delays are simulated with randomization. Minimum and maximum delays can be changed by modifying the `DELAY_MIN` and `DELAY_MAX` constants in `const.js`.
 - Frame damage is simulated by just making the type **DAMAGED**. The probability for this can be changed by modifying the `CORRUPTION_PROBABILITY` in `const.js`.
+
+### References 
+
+- Computer Networks by Andrew S. Tanenbaum, David J. Wetherall
