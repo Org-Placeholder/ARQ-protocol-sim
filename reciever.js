@@ -5,7 +5,7 @@ import {
 	construct_frame,
 	print_message,
 } from "./util.js";
-import { frame_types } from "./const.js";
+import { FRAME_TYPES } from "./const.js";
 import require from "requirejs";
 
 const express = require("express");
@@ -24,7 +24,7 @@ const recieve = (io, port) => {
 
 	io.on("connection", (s) => {
 		socket = s;
-		console.log("[GENERAL]".magenta + "sender connected");
+		console.log("[GENERAL]".magenta + " sender connected");
 		socket.on("message", (data) => {
 			handle_event(data);
 		});
@@ -38,9 +38,9 @@ const recieve = (io, port) => {
 const handle_event = (data) => {
 	var frame = from_physical_layer(data);
 
-	if (frame.kind != frame_types.INFO) {
+	if (frame.kind != FRAME_TYPES.INFO) {
 		console.log(
-			"[DATA LINK LAYER]".blue + " Damaged frame received, doing nothing"
+			"[DATA LINK LAYER]".blue + " Damaged frame received, ignored"
 		);
 	} else {
 		if (frame.seq_no != exp_seq_no) {
@@ -55,7 +55,7 @@ const handle_event = (data) => {
 		var ack_frame = construct_frame(
 			frame.info,
 			frame.seq_no,
-			frame_types.ACK
+			FRAME_TYPES.ACK
 		);
 		to_physical_layer(socket, ack_frame);
 	}
@@ -63,7 +63,7 @@ const handle_event = (data) => {
 
 var args = process.argv;
 if (args.length < 3) {
-	console.log("node receiver.js [port]");
+	console.log("usage : node receiver.js [PORT]");
 	process.exit();
 }
 const port = args[2];

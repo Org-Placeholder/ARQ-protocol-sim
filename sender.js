@@ -5,7 +5,7 @@ import {
 	construct_packet_array,
 	construct_frame,
 } from "./util.js";
-import { TIMEOUT_LENGTH, frame_types } from "./const.js";
+import { TIMEOUT_LENGTH, FRAME_TYPES } from "./const.js";
 import require from "requirejs";
 const io = require("socket.io-client");
 var packet_array = [];
@@ -30,7 +30,7 @@ const send = (ip, port) => {
 
 const send_current_frame = () => {
 	var packet = from_network_layer(packet_array, packet_index);
-	var frame = construct_frame(packet, packet_index, frame_types.INFO);
+	var frame = construct_frame(packet, packet_index, FRAME_TYPES.INFO);
 	to_physical_layer(socket, frame);
 	timer = setTimeout(() => {
 		console.log("[DATA LINK LAYER]".blue + " Timer timed out, resending");
@@ -39,9 +39,9 @@ const send_current_frame = () => {
 };
 
 const handle_event = (frame) => {
-	if (frame.kind != frame_types.ACK) {
+	if (frame.kind != FRAME_TYPES.ACK) {
 		console.log(
-			"[DATA LINK LAYER]".blue + " Damaged frame received, doing nothing"
+			"[DATA LINK LAYER]".blue + " Damaged frame received, ignored"
 		);
 	} else {
 		if (frame.seq_no == packet_index) {
@@ -64,7 +64,7 @@ const handle_event = (frame) => {
 
 var args = process.argv;
 if (args.length < 5) {
-	console.log("node sender.js [ip,port,packet]");
+	console.log("usage : node sender.js [IP] [PORT] [MESSAGE]");
 	process.exit();
 }
 const ip = args[2];
@@ -72,5 +72,4 @@ const port = args[3];
 const message = args[4];
 
 packet_array = construct_packet_array(message);
-console.log(packet_array);
 send(ip, port);
