@@ -30,7 +30,7 @@ const send = (ip, port) => {
 
 const send_current_frame = () => {
 	var packet = from_network_layer(packet_array, packet_index);
-	var frame = construct_frame(packet, packet_index, FRAME_TYPES.INFO);
+	var frame = construct_frame(packet, packet_index%2, FRAME_TYPES.INFO);
 	to_physical_layer(socket, frame);
 	timer = setTimeout(() => {
 		console.log("[DATA LINK LAYER]".blue + " Timer timed out, resending");
@@ -44,7 +44,7 @@ const handle_event = (frame) => {
 			"[DATA LINK LAYER]".blue + " Damaged frame received, ignored"
 		);
 	} else {
-		if (frame.seq_no == packet_index) {
+		if (frame.seq_no == packet_index%2) {
 			packet_index++;
 			clearTimeout(timer);
 			if (packet_index < packet_array.length) {
