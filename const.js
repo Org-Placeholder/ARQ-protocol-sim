@@ -9,10 +9,8 @@ export const FRAME_TYPES = {
 
 export const MAX_PACKET_LENGTH = 1;
 
-export const TIMEOUT_LENGTH = 1500;
+export const TIMEOUT_LENGTH = 110;
 
 export const CORRUPTION_PROBABLITY = 0.1;
 
-export const DELAY_MIN = 0;
-
-export const DELAY_MAX = 100;
+export const LOSS_PROBABLITY = 0.3;

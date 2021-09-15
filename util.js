@@ -2,8 +2,7 @@ import {
 	FRAME_TYPES,
 	MAX_PACKET_LENGTH,
 	CORRUPTION_PROBABLITY,
-	DELAY_MIN,
-	DELAY_MAX,
+	LOSS_PROBABLITY,
 } from "./const.js";
 var message = "";
 export const to_physical_layer = (socket, frame) => {
@@ -12,10 +11,11 @@ export const to_physical_layer = (socket, frame) => {
 	}
 	console.log("[PHYSICAL LAYER]".green + " Sending frame :");
 	console.log(frame);
-	var delay = DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN);
-	setTimeout(() => {
+	if (Math.random() > LOSS_PROBABLITY) {
 		socket.emit("message", frame);
-	}, delay);
+	} else {
+		console.log("[PHYSICAL LAYER]".green + " Frame lost");
+	}
 };
 
 export const from_physical_layer = (data) => {

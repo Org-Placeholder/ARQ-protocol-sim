@@ -50,7 +50,7 @@ const handle_event = (data) => {
 			);
 		} else {
 			to_network_layer(frame.info);
-			exp_seq_no=1-exp_seq_no;
+			exp_seq_no = 1 - exp_seq_no;
 		}
 		var ack_frame = construct_frame(
 			frame.info,
