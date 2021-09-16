@@ -13,4 +13,4 @@ export const TIMEOUT_LENGTH = 110;
 
 export const CORRUPTION_PROBABLITY = 0.1;
 
-export const LOSS_PROBABLITY = 0.3;
+export const LOSS_PROBABLITY = 0.2;
